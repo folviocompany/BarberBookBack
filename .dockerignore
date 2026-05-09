@@ -1,0 +1,12 @@
+demo/target/
+.git/
+.gitignore
+*.md
+.env
+demo/application-dev.yml
+demo/.mvn/wrapper/maven-wrapper.jar
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
