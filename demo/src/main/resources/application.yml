@@ -60,6 +60,12 @@ spring:
   jpa:
     show-sql: false
 
+server:
+  port: ${PORT:8080}
+
 app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-hours: ${JWT_EXPIRATION_HOURS:8}
   cors:
     allowed-origins: ${FRONTEND_URL}
