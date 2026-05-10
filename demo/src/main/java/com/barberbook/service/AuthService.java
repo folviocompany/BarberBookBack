@@ -24,6 +24,7 @@ public class AuthService {
     public LoginResponse login(LoginRequest request) {
         log.info("=== DEBUG LOGIN ===");
         log.info("Email recebido: '{}'", request.email());
+        log.info("Total de barbearias no banco: {}", barbeariaRepository.count());
 
         Barbearia barbearia = barbeariaRepository.findByEmail(request.email())
                 .orElseThrow(() -> {
