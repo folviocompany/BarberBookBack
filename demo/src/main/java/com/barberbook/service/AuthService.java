@@ -8,9 +8,11 @@ import com.barberbook.exception.UnauthorizedException;
 import com.barberbook.repository.BarbeariaRepository;
 import com.barberbook.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -20,10 +22,25 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse login(LoginRequest request) {
-        Barbearia barbearia = barbeariaRepository.findByEmail(request.email())
-                .orElseThrow(() -> new UnauthorizedException("Credenciais inválidas"));
+        log.info("=== DEBUG LOGIN ===");
+        log.info("Email recebido: '{}'", request.email());
 
-        if (!passwordEncoder.matches(request.senha(), barbearia.getSenhaHash())) {
+        Barbearia barbearia = barbeariaRepository.findByEmail(request.email())
+                .orElseThrow(() -> {
+                    log.info("Barbearia encontrada: false");
+                    log.info("===================");
+                    return new UnauthorizedException("Credenciais inválidas");
+                });
+
+        log.info("Barbearia encontrada: true");
+        log.info("Hash no banco: '{}'", barbearia.getSenhaHash());
+        log.info("Tamanho do hash: {}", barbearia.getSenhaHash().length());
+        log.info("Senha recebida: '{}'", request.senha());
+        boolean matches = passwordEncoder.matches(request.senha(), barbearia.getSenhaHash());
+        log.info("Senha bate: {}", matches);
+        log.info("===================");
+
+        if (!matches) {
             throw new UnauthorizedException("Credenciais inválidas");
         }
 
